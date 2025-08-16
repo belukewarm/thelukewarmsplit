@@ -26,7 +26,7 @@ body{background:linear-gradient(180deg,#fff 0%, var(--bg) 100%); color: var(--te
 .muted{ @apply text-muted;}
 .switch{ @apply relative w-12 h-6 bg-gray-300 rounded-full cursor-pointer transition;}
 .switch.on{ @apply bg-black;}
-.switch .knob{ @apply absolute top-1 left-1 w-4.5 h-4.5 rounded-full bg-white transition; }
+.switch .knob{ @apply absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition; }
 .switch.on .knob{ transform: translateX(24px); }
 .steps{ @apply flex flex-wrap items-center gap-3 mb-3;}
 .step{ @apply flex items-center gap-2 px-3 py-2 border border-border rounded-xl bg-white cursor-pointer;}
