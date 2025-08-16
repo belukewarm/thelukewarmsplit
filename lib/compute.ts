@@ -1,14 +1,7 @@
 export type Person = { id: string; name: string };
 export type Item = { id: string; name: string; qty: number; price: number; personId: string };
 export type Fees = { delivery: number; service: number; taxes: number; tip: number; otherLabel: string; other: number };
-export type State = {
-  people: Person[];
-  items: Item[];
-  fees: Fees;
-  includeEmpty: boolean;
-  roundUp: boolean;
-  step: 1 | 2 | 3 | 4;
-};
+export type State = { people: Person[]; items: Item[]; fees: Fees; includeEmpty: boolean; roundUp: boolean; step: 1|2|3|4 };
 
 export const currency = (n: number) => n.toLocaleString(undefined, { style: "currency", currency: "USD" });
 export const uid = () => Math.random().toString(36).slice(2, 9);
@@ -44,13 +37,8 @@ export function computeFrom(state: State) {
     const target = Math.round(rawTotal);
     let diff = target - sumFloors;
     entries.forEach((e, i) => perPerson[e.id].total = floors[i]);
-    if (diff > 0) {
-      fracs.sort((a, b) => b.frac - a.frac);
-      for (let k = 0; k < diff && k < fracs.length; k++) { const idx = fracs[k].i; perPerson[entries[idx].id].total += 1; }
-    } else if (diff < 0) {
-      fracs.sort((a, b) => a.frac - b.frac);
-      for (let k = 0; k < (-diff) && k < fracs.length; k++) { const idx = fracs[k].i; if (perPerson[entries[idx].id].total > 0) perPerson[entries[idx].id].total -= 1; }
-    }
+    if (diff > 0) { fracs.sort((a, b) => b.frac - a.frac); for (let k = 0; k < diff && k < fracs.length; k++) { const idx = fracs[k].i; perPerson[entries[idx].id].total += 1; } }
+    else if (diff < 0) { fracs.sort((a, b) => a.frac - b.frac); for (let k = 0; k < (-diff) && k < fracs.length; k++) { const idx = fracs[k].i; if (perPerson[entries[idx].id].total > 0) perPerson[entries[idx].id].total -= 1; } }
   }
   const perPersonSum = Object.values(perPerson).reduce((a, b) => a + b.total, 0);
   return { feeTotal, itemsTotal, rawTotal, perPersonSum, participants, perPerson };

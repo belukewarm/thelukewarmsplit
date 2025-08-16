@@ -1,18 +1,18 @@
-# Lukewarm Split — Glassmorphic Build (with Dark Mode)
+# Lukewarm Split — Aurora Build (New UI)
 
-A minimalist, gorgeous Uber Eats/groceries split app.
-- Items assigned per person
-- Fees split evenly across participants
-- Balanced whole-dollar rounding
-- 4-step wizard with animations
-- **Glassmorphism** UI + gradient blobs
-- **Dark mode** toggle (persists)
+Brand-new glassmorphic UI with a left sidebar wizard, sticky bottom navigation, and smooth animations.
+- Items per person, fees split evenly
+- Whole-dollar balanced rounding
+- Dark mode (toggle persists)
+- Framer Motion transitions
+- Lucide icons
+- Strong, clean, minimal aesthetic
 
-## Run locally
+## Run
 ```bash
-npm i   # or pnpm i / yarn
+npm i
 npm run dev
 ```
 
 ## Deploy
-Upload to GitHub → Vercel → New Project → Import. No env vars needed.
+Upload to GitHub and import to Vercel.

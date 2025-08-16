@@ -1,81 +1,66 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 :root{
-  --bg: 255 255 255;
-  --text: 11 11 13;
-  --muted: 107 114 128;
-  --border: 231 231 238;
-  --card: 255 255 255;
-  --brand: 25 33 78;
-  --accent-from: 168 85 247;
-  --accent-to: 34 211 238;
+  --bg: 250 250 255;
+  --text: 14 17 24;
+  --muted: 105 114 142;
+  --border: 223 227 243;
+  --glass: 255 255 255;
+  --accent-from: 168 85 247;  /* violet */
+  --accent-to: 59 130 246;    /* blue */
+  --brand: 79 70 229;         /* indigo-600 */
 }
 .dark{
-  --bg: 10 11 15;
-  --text: 239 241 245;
+  --bg: 10 12 18;
+  --text: 235 238 245;
   --muted: 156 163 175;
-  --border: 40 42 54;
-  --card: 16 18 24;
-  --brand: 199 210 254;
-  --accent-from: 59 130 246;
-  --accent-to: 236 72 153;
+  --border: 42 45 60;
+  --glass: 16 18 24;
+  --accent-from: 59 130 246;  /* blue */
+  --accent-to: 236 72 153;    /* pink */
+  --brand: 199 210 254;       /* indigo-200 */
 }
+
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
-  background: radial-gradient(1200px 600px at 10% -10%, rgba(var(--accent-from),0.15), transparent),
-              radial-gradient(800px 600px at 110% 20%, rgba(var(--accent-to),0.18), transparent),
-              rgb(var(--bg));
+  background:
+    radial-gradient(900px 500px at -10% -20%, rgba(var(--accent-from),0.18), transparent 60%),
+    radial-gradient(800px 600px at 110% 10%, rgba(var(--accent-to),0.16), transparent 55%),
+    rgb(var(--bg));
   color: rgb(var(--text));
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji;
 }
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Glass helpers */
-.glass{
-  @apply rounded-3xl border backdrop-blur-xl shadow-soft;
-  background: linear-gradient(180deg, rgba(255,255,255,0.66), rgba(255,255,255,0.3));
-  border-color: rgba(var(--border), 0.5);
-}
-.dark .glass{
-  background: linear-gradient(180deg, rgba(17,18,24,0.6), rgba(17,18,24,0.35));
-  border-color: rgba(var(--border), 0.6);
-}
+.glass{ @apply rounded-3xl backdrop-blur-xl shadow-soft border; background: rgba(var(--glass), 0.6); border-color: rgba(var(--border), 0.7); }
+.dark .glass{ background: rgba(var(--glass), 0.35); }
 
-/* Buttons */
 .btn{ @apply inline-flex items-center justify-center gap-2 h-11 px-5 rounded-2xl border border-transparent shadow-soft transition active:translate-y-px; color: white; background: rgb(var(--brand)); }
 .btn:hover{ @apply brightness-110; }
 .btn-outline{ @apply bg-transparent border border-[rgba(var(--border),0.8)] text-[rgb(var(--text))]; }
 .btn-icon{ @apply w-10 h-10 p-0; }
+.icon{ width: 1em; height: 1em; stroke: currentColor; }
 
-/* Cards & text */
-.card{ @apply glass overflow-hidden; }
-.card-h{ @apply px-5 py-4 border-b border-[rgba(var(--border),0.7)] font-semibold flex items-center gap-2; }
-.card-c{ @apply p-5; }
-.pill{ @apply inline-flex items-center gap-2 border border-[rgba(var(--border),0.7)] rounded-full px-3 py-1 text-xs text-[rgb(var(--muted))] bg-white/40 dark:bg-black/20; }
+.input{ @apply h-11 border border-[rgba(var(--border),0.8)] rounded-xl px-3 w-full bg-white/60 dark:bg-black/30 backdrop-blur placeholder:text-[rgb(var(--muted))]; }
+.select{ @apply h-11 border border-[rgba(var(--border),0.8)] rounded-xl px-3 w-full bg-white/60 dark:bg-black/30 backdrop-blur; }
+
+/* Sidebar wizard */
+.sidebar{ @apply glass p-5 md:p-6 sticky top-6; }
+.step-li{ @apply flex items-center gap-3 p-3 rounded-2xl cursor-pointer transition; }
+.step-li.active{ background: linear-gradient(135deg, rgba(var(--accent-from),.18), rgba(var(--accent-to),.18)); }
+.step-dot{ @apply w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold bg-black text-white; }
+
+/* Bottom nav */
+.bottombar{ @apply glass fixed left-0 right-0 bottom-0 md:static md:rounded-3xl md:shadow-none md:bg-transparent border-t md:border-0; }
+.bottom-inner{ @apply max-w-[1200px] mx-auto px-5 py-4 flex items-center gap-2 justify-between; }
+
+.sep{ @apply h-px bg-[rgba(var(--border),0.7)] my-4; }
 .stat{ @apply border border-[rgba(var(--border),0.7)] rounded-2xl p-4 bg-white/40 dark:bg-black/20; }
-.sep{ @apply h-px bg-[rgba(var(--border),0.7)] my-3; }
-.between{ @apply flex items-center justify-between; }
 
-/* Switch */
-.switch{ @apply relative w-12 h-6 bg-gray-300 dark:bg-gray-700 rounded-full cursor-pointer transition; }
-.switch.on{ @apply bg-black; }
-.switch .knob{ @apply absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition; }
-.switch.on .knob{ transform: translateX(24px); }
-
-/* Stepper */
-.steps{ @apply flex flex-wrap items-center gap-3 mb-3; }
-.step{ @apply flex items-center gap-2 px-3 py-2 border border-[rgba(var(--border),0.7)] rounded-xl bg-white/50 dark:bg-black/20 cursor-pointer; }
-.step.active{ box-shadow: 0 0 0 4px rgba(199,210,254,.65); border-color: rgba(199,210,254,.9); }
-.ix{ @apply w-6 h-6 rounded-full bg-black text-white inline-flex items-center justify-center text-xs; }
-
-.progress{ @apply h-1.5 rounded-full overflow-hidden bg-black/10 dark:bg-white/10; }
-
-/* Animations */
-.fade{ animation: fade .35s ease both } @keyframes fade { from{opacity:.0; transform: translateY(4px)} to{ opacity:1; transform:none } }
-.pop{ animation: pop .25s ease both } @keyframes pop { from{ opacity:.7; transform: scale(.98)} to{opacity:1; transform:scale(1)} }
-
-/* Icons inherit color */
-button svg, .btn svg, .btn-outline svg, .pill svg, .card-h svg { width: 1em; height: 1em; stroke: currentColor; }
+/* Progress */
+.progress{ @apply h-2 rounded-full overflow-hidden bg-black/10 dark:bg-white/10; }
+.progress-bar{ @apply h-full bg-gradient-to-r from-[rgb(var(--accent-from))] to-[rgb(var(--accent-to))]; }
