@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 255 255 255;
+  --fg: 17 24 39;
+}
+.dark :root {
+  --bg: 2 6 23;
+  --fg: 229 231 235;
+}
+html, body {
+  height: 100%;
+}
+body {
+  @apply min-h-screen bg-[rgb(var(--bg))] text-[rgb(var(--fg))];
+}
