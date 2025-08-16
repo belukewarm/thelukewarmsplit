@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { currency, uid, clampMoney, computeFrom } from '../lib/compute';
+import { currency, uid, clampMoney, computeFrom, splitEvenly } from '../lib/compute';
 import { MenuSquare, Receipt, RefreshCw, Users, Info, ShoppingBag, Sparkles, Settings2, Activity, Table, ClipboardCopy, ArrowLeft, ArrowRight, Wallet, UserPlus, Trash2, Play } from 'lucide-react';
 
 type Person = { id: string; name: string };
@@ -96,21 +96,35 @@ export default function Page() {
     </div>
   );
 
+  
   // ---- Tests (basic, run in browser) ----
   function runTests() {
     const results: {name:string; pass:boolean}[] = [];
     const assert = (name:string, cond:boolean) => { const pass=!!cond; results.push({name, pass}); if(!pass) console.error('[TEST FAIL]', name); };
     const near = (a:number,b:number,eps=1e-9)=> Math.abs(a-b)<=eps;
-    // splitEvenly
-    let arr = (await import('../lib/compute')).then? []:[]; // placeholder
-    arr = [3.34,3.33,3.33];
-    assert('splitEvenly distribution sample ok', near(arr[0],3.34) && near(arr[1],3.33) && near(arr[2],3.33));
+
+    // splitEvenly basics
+    let arr = splitEvenly(10,3);
+    assert('splitEvenly length', arr.length===3);
+    assert('splitEvenly sums to 10', near(arr.reduce((a,b)=>a+b,0), 10));
+    assert('splitEvenly distribution', near(arr[0],3.34) && near(arr[1],3.33) && near(arr[2],3.33));
+
+    arr = splitEvenly(1,3); // 0.34, 0.33, 0.33
+    assert('splitEvenly small cents sums to 1', near(arr.reduce((a,b)=>a+b,0), 1));
+
     // compute basic
     const sample:any = { people:[{id:'a',name:'A'},{id:'b',name:'B'}], items:[{id:'i1',name:'x',price:10,qty:1,personId:'a'},{id:'i2',name:'y',price:5,qty:1,personId:'b'}], fees:{delivery:1,service:1,taxes:1,tip:0,otherLabel:'Bag fee',other:0}, includeEmpty:false, roundUp:false, step:4 };
     const c1 = computeFrom(sample);
     assert('items=15', near(c1.itemsTotal,15));
     assert('fees=3', near(c1.feeTotal,3));
     assert('per person totals', near(c1.perPerson['a'].total, 11.5) && near(c1.perPerson['b'].total, 6.5));
+
+    // roundUp behavior (balanced whole dollars)
+    const c2 = computeFrom({ ...sample, roundUp: true });
+    const roundedSum = Object.values(c2.perPerson).reduce((a: number, b: any) => a + b.total, 0);
+    assert('roundUp totals are whole dollars', Object.values(c2.perPerson).every((p: any) => Number.isInteger(p.total)));
+    assert('roundUp sum equals rounded order total', near(roundedSum, Math.round(c2.rawTotal)));
+
     const passed = results.filter(r=>r.pass).length;
     return {passed, total: results.length, results};
   }
